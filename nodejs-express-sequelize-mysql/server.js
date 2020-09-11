@@ -3,7 +3,7 @@
 const express = require('express'); //for building the Rest apis
 const bodyParser = require('body-parser'); //to parse the request and create the req.body object
 const cors = require('cors'); //provides Express middleware to enable CORS with various options
-const db = require('./app/models/index');
+const db = require('./app/models/index'); // inilize database
 
 //create an Express app
 const app = express();
@@ -35,6 +35,7 @@ app.get("/", (req, res) => {
     res.json({ message: "Welcome to node express sequelize CRUD application" });
 })
 
+//add route before app.listen
 require('./app/routes/tutorial.route')(app);
 
 //set port, listen for requests

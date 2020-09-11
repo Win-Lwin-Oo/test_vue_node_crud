@@ -24,5 +24,6 @@ module.exports = app => {
     // Delete all Tutorials
     router.delete("/", tutorials.deleteAll);
 
+    // define initial/default api call url
     app.use('/api/tutorials', router);
 };

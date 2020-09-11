@@ -15,9 +15,10 @@ const sequelize = new Sequelize(dbConfig.db, dbConfig.user, dbConfig.password, {
 });
 
 const db = {};
-db.Sequelize = Sequelize;
-db.sequelize = sequelize;
+db.Sequelize = Sequelize; // to used Sequelize database sql operator(eg: like) in controller
+db.sequelize = sequelize; // to synce database in server.js
 
+// to used Sequelize databse sql method  in controller
 db.tutorials = require('../models/tutorial.model')(sequelize,Sequelize);
 
 module.exports = db;
