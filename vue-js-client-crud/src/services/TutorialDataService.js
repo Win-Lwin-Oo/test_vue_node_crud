@@ -5,31 +5,31 @@ import htpp from '../utils/http';
 
 class TutorialDataService {
     create(data) {
-        return htpp.post("/tutorials", data);
+        return htpp.post("/", data);
     }
 
     getAll() {
-        return http.get("/tutorials");
+        return http.get("/");
     }
 
     get(id) {
-        return htpp.get(`/tutorials/${id}`);
+        return htpp.get(`/${id}`);
     }
 
     update(id, data) {
-        return http.put(`/tutorials/${id}`, data);
+        return http.put(`/${id}`, data);
     }
 
     delete(id) {
-        return http.delete(`/tutorials/${id}`);
+        return http.delete(`/${id}`);
     }
 
     deleteAll() {
-        return http.delete("/tutorials");
+        return http.delete("/");
     }
 
     findByTitle(title) {
-        return http.get(`/tutorials?title=${title}`);
+        return http.get(`?title=${title}`);
     }
 }
 
