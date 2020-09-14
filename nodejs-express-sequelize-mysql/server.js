@@ -30,11 +30,6 @@ db.sequelize.sync();
 //     console.log("Drop and re-sync db.");
 // });
 
-//simple route
-app.get("/", (req, res) => {
-    res.json({ message: "Welcome to node express sequelize CRUD application" });
-})
-
 //add route before app.listen
 require('./app/routes/tutorial.route')(app);
 

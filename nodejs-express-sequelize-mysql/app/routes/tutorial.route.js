@@ -2,6 +2,25 @@ module.exports = app => {
     const tutorials = require('../controllers/tutorial.controller.js');
 
     var router = require('express').Router();
+    const swaggerUI = require('swagger-ui-express');
+    const swaggerJsDocs = require('swagger-jsdoc');
+    const swaggerOptions = require('../../swagger.option');
+
+    const swaggerDocs = swaggerJsDocs(swaggerOptions);
+
+    //swagger setup
+    router.use('/docs', swaggerUI.serve);
+    router.get(
+        '/docs',
+        swaggerUI.setup(swaggerDocs, {
+            explorer: true
+        })
+    );
+
+    //simple api
+    router.get("/welcome", (req, res) => {
+        res.json({ message: "Welcome to node express sequelize CRUD application" });
+    })
 
     // Create a new Tutorial
     router.post("/", tutorials.create);
