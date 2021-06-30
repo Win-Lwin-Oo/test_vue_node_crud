@@ -35,7 +35,7 @@ exports.create = (req, res) => {
     // Save Tutorial in the database
     Tutorial.create(tutorial)
         .then(data => {
-            res.send(data);
+            res.status(200).send(data);
         })
         .catch(err => {
             res.status(500).send({
@@ -52,7 +52,7 @@ exports.findAll = (req, res) => {
 
     Tutorial.findAll({ where: condition })
         .then(data => {
-            res.send(data);
+            res.status(200).send(data);
         })
         .catch(err => {
             res.status(500).send({
@@ -68,7 +68,7 @@ exports.findOne = (req, res) => {
 
     Tutorial.findByPk(id)
         .then(data => {
-            res.send(data);
+            res.status(200).send(data);
         })
         .catch(err => {
             res.status(500).send({
@@ -86,11 +86,11 @@ exports.update = (req, res) => {
     })
         .then(num => {
             if (num == 1) {
-                res.send({
+                res.status(200).send({
                     message: "Tutorial was updated successfully."
                 });
             } else {
-                res.send({
+                res.status(200).send({
                     message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found or req.body is empty!`
                 });
             }
@@ -111,11 +111,11 @@ exports.delete = (req, res) => {
     })
         .then(num => {
             if (num == 1) {
-                res.send({
+                res.status(200).send({
                     message: "Tutorial was deleted successfully!"
                 });
             } else {
-                res.send({
+                res.status(200).send({
                     message: `Cannot delete Tutorial with id=${id}. Maybe Tutorial was not found!`
                 });
             }
@@ -134,7 +134,7 @@ exports.deleteAll = (req, res) => {
         truncate: false
     })
         .then(nums => {
-            res.send({ message: `${nums} Tutorials were deleted successfully!` });
+            res.status(200).send({ message: `${nums} Tutorials were deleted successfully!` });
         })
         .catch(err => {
             res.status(500).send({
@@ -148,7 +148,7 @@ exports.deleteAll = (req, res) => {
 exports.findAllPublished = (req, res) => {
     Tutorial.findAll({ where: { published: true } })
         .then(data => {
-            res.send(data);
+            res.status(200).send(data);
         })
         .catch(err => {
             res.status(500).send({
