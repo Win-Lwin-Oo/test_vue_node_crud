@@ -1,53 +1,6 @@
-import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
+import 'package:fl_client_app/model/tutorial.dart';
+import 'package:fl_client_app/services/tutorial_data_services.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'model/album.dart';
-
-Future<Album> fetchAlbum() async {
-  final response =
-  await http.get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'),
-    //To fetch data from most web services, you need to provide authorization.
-    //Add authorization
-    headers: {HttpHeaders.authorizationHeader: "Basic your_api_token_here"},);
-  //debugPrint('Response=> ${(response.body).runtimeType}');
-  //debugPrint('Response decode=> ${(json.decode(response.body)).runtimeType}');
-  if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    var obj = Album.fromJsonObj(json.decode(response.body));
-    debugPrint('AlbumObj=>$obj');
-    return Album.fromJsonObj(json.decode(response.body));
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load album');
-  }
-}
-
-Future<List<Album>> fetchAlbumList() async {
-  final response =
-  await http.get(Uri.parse('https://jsonplaceholder.typicode.com/albums'),
-    //To fetch data from most web services, you need to provide authorization.
-    //Add authorization
-    headers: {HttpHeaders.authorizationHeader: "Basic your_api_token_here"},);
-  //debugPrint('Response type=> ${(response.body).runtimeType}');
-  //debugPrint('Response decode type=> ${(json.decode(response.body)).runtimeType}');
-  //debugPrint('Response decode data=> ${(json.decode(response.body))}');
-  if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    var jsonArr = json.decode(response.body) as List;
-    List<Album> albumList = jsonArr.map((album) => Album.fromJsonArr(album)).toList();
-    debugPrint('AlbumList=>$albumList');
-    return albumList;
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load album');
-  }
-}
 
 void main() => runApp(MyApp());
 
@@ -59,20 +12,26 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late Future<Album> futureAlbum;
-  late Future<List<Album>> futureAlbumList;
+  TutorialDataServices tutorialDataServices = new TutorialDataServices();
+  late Future<List<Tutorial>> tutorialList;
 
   @override
   void initState() {
     super.initState();
-    futureAlbum = fetchAlbum();
-    futureAlbumList = fetchAlbumList();
+    _getAllData();
+  }
+
+  _getAllData() {
+    debugPrint('Hello');
+    setState(() {
+      tutorialList = tutorialDataServices.getAll();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Fetch Data Example',
+      title: 'Tutorial',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -81,8 +40,8 @@ class _MyAppState extends State<MyApp> {
           title: Text('Tutorial'),
         ),
         body: Center(
-          child: FutureBuilder<List<Album>>(
-            future: futureAlbumList,
+          child: FutureBuilder<List<Tutorial>>(
+            future: tutorialList,
             builder: (context, snapshot) {
               /*Note that snapshot.hasData only returns true
               when the snapshot contains a non-null data value.
@@ -91,27 +50,37 @@ class _MyAppState extends State<MyApp> {
               if (snapshot.hasData) {
                 return ListView.separated(
                   separatorBuilder: (context, index) => Divider(
-                    color: Colors.blueGrey,
+                    color: Colors.black26,
                   ),
                   itemCount: snapshot.data!.length,
-                  itemBuilder: (context, index){
-                    Album album = snapshot.data![index];
+                  itemBuilder: (context, index) {
+                    Tutorial tutorial = snapshot.data![index];
                     return ListTile(
                       leading: CircleAvatar(
-                        child: Text(album.title.substring(0,1).toUpperCase()),
+                        child:
+                            Text(tutorial.title.substring(0, 1).toUpperCase()),
                       ),
-                      title: Text(album.title),
+                      title: Text(tutorial.title),
                     );
                   },
                 );
               } else if (snapshot.hasError) {
-                return Text("${snapshot.error}");
+                return TextButton(
+                    onPressed: _getAllData,
+                    child: Text(
+                      'Try again',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ));
               }
 
               // By default, show a loading spinner.
               return CircularProgressIndicator();
             },
           ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: _getAllData,
+          child: Icon(Icons.refresh),
         ),
       ),
     );
