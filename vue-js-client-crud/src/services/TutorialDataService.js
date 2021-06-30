@@ -1,5 +1,4 @@
 import http from '../utils/http';
-import htpp from '../utils/http';
 
 //service will use axios from HTTP client to send HTTP requests
 
