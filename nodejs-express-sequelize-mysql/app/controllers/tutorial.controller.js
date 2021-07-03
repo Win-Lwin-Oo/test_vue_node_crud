@@ -16,7 +16,10 @@ const Op = db.Sequelize.Op;
 
 //create and save new data
 exports.create = (req, res) => {
-    console.log(`Request data=> ${req.body}`);
+    console.log(`Request body=> ${req.body}`);
+    var reqData = JSON.stringify(req.body);
+    console.log(`Request decode=> ${reqData}`);
+
     // Validate request
     if (!req.body.title) {
         res.status(400).send({
@@ -112,10 +115,12 @@ exports.delete = (req, res) => {
         .then(num => {
             if (num == 1) {
                 res.status(200).send({
+                    status: "success",
                     message: "Tutorial was deleted successfully!"
                 });
             } else {
                 res.status(200).send({
+                    status: "fail",
                     message: `Cannot delete Tutorial with id=${id}. Maybe Tutorial was not found!`
                 });
             }

@@ -1,6 +1,10 @@
 import 'package:fl_client_app/utils/http_helper.dart';
 
 class TutorialDataServices {
+  create(Map<String, Object> data) {
+    return postDataObj('/', data);
+  }
+
   getAll() {
     return getDataList('/');
   }
@@ -11,5 +15,9 @@ class TutorialDataServices {
 
   findByTitle(String title) {
     return getDataList('/?title=$title');
+  }
+
+  delete(int id) {
+    return deleteDataObj('/$id');
   }
 }

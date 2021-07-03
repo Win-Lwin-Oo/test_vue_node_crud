@@ -39,3 +39,20 @@ class Tutorial {
     return '{ ${this.id}, ${this.title}, ${this.description}, ${this.published}, ${this.createdAt}, ${this.updatedAt} }';
   }
 }
+
+class Result {
+  final String status;
+  final String message;
+
+  Result({required this.status, required this.message});
+
+  factory Result.fromJsonObj(Map<String, dynamic> json) {
+    return Result(
+        status: json['status'], message: json['message']);
+  }
+
+  @override
+  String toString() {
+    return '{ ${this.status}, ${this.message}';
+  }
+}

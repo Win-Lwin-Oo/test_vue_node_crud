@@ -4,7 +4,7 @@ import http from '../utils/http';
 
 class TutorialDataService {
     create(data) {
-        return htpp.post("/", data);
+        return http.post("/", data);
     }
 
     getAll() {
@@ -12,7 +12,7 @@ class TutorialDataService {
     }
 
     get(id) {
-        return htpp.get(`/${id}`);
+        return http.get(`/${id}`);
     }
 
     update(id, data) {

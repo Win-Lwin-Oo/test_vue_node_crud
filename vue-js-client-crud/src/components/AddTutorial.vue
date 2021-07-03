@@ -54,6 +54,7 @@ export default {
       var data = {
         title: this.tutorial.title,
         description: this.tutorial.description,
+        published: true,
       };
 
       TutorialDataService.create(data)
