@@ -74,11 +74,49 @@ Future<Result> deleteDataObj(String uri) async {
   final response = await http.delete(Uri.parse(fullUri), headers: {
     'Content-Type': 'application/json; charset=UTF-8',
   });
-  // print('Response=> ${response.statusCode}');
+  print('Response=> ${response.statusCode}');
   if (response.statusCode == 200) {
     var data = Result.fromJsonObj(json.decode(response.body));
+    print('Delete =>$data');
     return data;
   } else {
     throw Exception('Failed to delete data');
+  }
+}
+
+// Update And Overwrite Entire Data By id
+Future<Result> updateDataObj(String uri, Map<String, Object> data) async {
+  print('Data=> $data');
+  String fullUri = base_uri + uri;
+  final response = await http.put(Uri.parse(fullUri),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: json.encode(data));
+  print('Response=> ${response.statusCode}');
+  if (response.statusCode == 200) {
+    var data = Result.fromJsonObj(json.decode(response.body));
+    print('Update =>$data');
+    return data;
+  } else {
+    throw Exception('Failed to update data');
+  }
+}
+
+// Update Specific Data Obj , Not Overwrite Entire Data
+Future<Result> patchDataObj(String uri, Map<String, Object> data) async {
+  String fullUri = base_uri + uri;
+  final response = await http.patch(Uri.parse(fullUri),
+      headers: {
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: json.encode(data));
+  print('Response=> ${response.statusCode}');
+  if (response.statusCode == 200) {
+    var data = Result.fromJsonObj(json.decode(response.body));
+    print('Patch =>$data');
+    return data;
+  } else {
+    throw Exception('Failed to update data');
   }
 }

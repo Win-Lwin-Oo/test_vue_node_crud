@@ -53,6 +53,6 @@ class Result {
 
   @override
   String toString() {
-    return '{ ${this.status}, ${this.message}';
+    return '{ ${this.status}, ${this.message} }';
   }
 }

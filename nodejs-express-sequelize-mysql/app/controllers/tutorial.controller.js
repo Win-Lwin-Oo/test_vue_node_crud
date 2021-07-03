@@ -90,16 +90,19 @@ exports.update = (req, res) => {
         .then(num => {
             if (num == 1) {
                 res.status(200).send({
+                    status: "success",
                     message: "Tutorial was updated successfully."
                 });
             } else {
                 res.status(200).send({
+                    status: "fail",
                     message: `Cannot update Tutorial with id=${id}. Maybe Tutorial was not found or req.body is empty!`
                 });
             }
         })
         .catch(err => {
             res.status(500).send({
+                status: "error",
                 message: "Error updating Tutorial with id=" + id
             });
         });
@@ -127,6 +130,7 @@ exports.delete = (req, res) => {
         })
         .catch(err => {
             res.status(500).send({
+                status: "error",
                 message: "Could not delete Tutorial with id=" + id
             });
         });

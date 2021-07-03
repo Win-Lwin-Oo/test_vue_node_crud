@@ -64,7 +64,20 @@ class _MyHomePageState extends State<MyHomePage> {
                       leading: CircleAvatar(
                         child: Text(tutorial.title.substring(0, 1).toUpperCase()),
                       ),
-                      title: Text(tutorial.title),
+                      title: Row(
+                        children: [
+                          Text(tutorial.title),
+                          Container(
+                            margin: EdgeInsets.only(left: 5.0),
+                            width: 10.0,
+                            height: 10.0,
+                            decoration: BoxDecoration(
+                                color: tutorial.published ? Colors.green : Colors.yellow,
+                                borderRadius: BorderRadius.circular(10.0)
+                            ),
+                          ),
+                        ],
+                      ),
                       trailing: InkWell(
                         child: Icon(
                           Icons.remove_circle_outline,
@@ -72,7 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                         onTap: () => _deleteTutorial(tutorial.id, context, index),
                       ),
-                      onTap: () => _openDetailDialog(context, tutorial.title,
+                      onTap: () => _openDetailDialog(context, tutorial.id, tutorial.title,
                           tutorial.description, tutorial.published),
                     );
                   },
@@ -126,11 +139,11 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _openDetailDialog(
-      BuildContext context, String title, String description, bool published) {
+      BuildContext context, int id, String title, String description, bool published) {
     Navigator.of(context).push(new MaterialPageRoute<Null>(
         builder: (BuildContext context) {
           return new TutorialDetails(
-              title: title, description: description, published: published);
+              id: id, title: title, description: description, published: published);
         },
         fullscreenDialog: true));
   }
