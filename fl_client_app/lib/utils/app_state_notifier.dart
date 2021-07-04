@@ -42,4 +42,15 @@ class AppStateNotifier extends ChangeNotifier {
     _message = data.message;
     notifyTutorialList();
   }
+
+  search(String searchTerms) {
+    print('search=>$searchTerms');
+    if(searchTerms.isEmpty){
+      getTutorialList();
+    }
+    _tutorialList = tutorialList.then((value) =>
+      value.where((item) {
+        return item.title.toLowerCase().contains(searchTerms.toLowerCase());
+      }).toList());
+  }
 }
