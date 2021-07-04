@@ -1,6 +1,8 @@
 import 'package:fl_client_app/model/tutorial.dart';
 import 'package:fl_client_app/services/tutorial_data_services.dart';
+import 'package:fl_client_app/utils/app_state_notifier.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AddNewTutorial extends StatefulWidget {
   const AddNewTutorial({Key? key}) : super(key: key);
@@ -88,6 +90,7 @@ class _AddNewTutorialState extends State<AddNewTutorial> {
       Future<Tutorial> response = tutorialDataServices.create(data);
       response.then((value) {
         if (value.id > 0) {
+          Provider.of<AppStateNotifier>(context,listen: false).notifyTutorialList();
           Navigator.of(context).pop();
           _resetForm();
         }

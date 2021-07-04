@@ -16,7 +16,7 @@ Future<Tutorial> getDataObj(String uri) async {
   if (response.statusCode == 200) {
     print('Response decode type=> ${(json.decode(response.body)).runtimeType}');
     var data = Tutorial.fromJsonObj(json.decode(response.body));
-    print('Data =>$data');
+    print('GetDataObj =>$data');
     return data;
   } else {
     throw Exception('Failed to load data');
@@ -41,7 +41,7 @@ Future<List<Tutorial>> getDataList(String uri) async {
     var jsonArr = json.decode(response.body) as List;
     List<Tutorial> data =
         jsonArr.map((album) => Tutorial.fromJsonArr(album)).toList();
-    print('Tutorial=>$data');
+    print('GetDataList =>$data');
     return data;
   } else {
     // If the server did not return a 200 OK response,
@@ -61,7 +61,7 @@ Future<Tutorial> postDataObj(String uri, Map<String, Object> data) async {
   // print('Response=> ${response.statusCode}');
   if (response.statusCode == 200) {
     var data = Tutorial.fromJsonObj(json.decode(response.body));
-    // print('Create =>$data');
+    print('Create =>$data');
     return data;
   } else {
     throw Exception('Failed to create data');

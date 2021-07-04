@@ -1,6 +1,8 @@
 import 'package:fl_client_app/model/tutorial.dart';
 import 'package:fl_client_app/services/tutorial_data_services.dart';
+import 'package:fl_client_app/utils/app_state_notifier.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class TutorialDetails extends StatefulWidget {
   const TutorialDetails(
@@ -24,7 +26,7 @@ class _TutorialDetailsState extends State<TutorialDetails> {
   int _id = 0;
   String _title = '';
   final TextEditingController _descriptionController =
-  new TextEditingController();
+      new TextEditingController();
   bool _published = false;
   bool _descriptionInvalid = false;
   @override
@@ -34,7 +36,7 @@ class _TutorialDetailsState extends State<TutorialDetails> {
         title: Text(_title),
         actions: [
           TextButton(
-              onPressed: ()=>_updateTutorial(_id,context),
+              onPressed: () => _updateTutorial(_id, context),
               child: Text('UPDATE', style: TextStyle(color: Colors.white))),
         ],
       ),
@@ -42,7 +44,9 @@ class _TutorialDetailsState extends State<TutorialDetails> {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            SizedBox(height: 20.0,),
+            SizedBox(
+              height: 20.0,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -50,19 +54,24 @@ class _TutorialDetailsState extends State<TutorialDetails> {
                   'Description:',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                SizedBox(width: 10.0,),
+                SizedBox(
+                  width: 10.0,
+                ),
                 Flexible(
                   child: TextField(
                     controller: _descriptionController,
                     decoration: InputDecoration(
                       hintText: 'Enter tutorial description',
-                      errorText: _descriptionInvalid ? 'Invalid description' : null,
+                      errorText:
+                          _descriptionInvalid ? 'Invalid description' : null,
                     ),
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 10.0,),
+            SizedBox(
+              height: 10.0,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -93,14 +102,14 @@ class _TutorialDetailsState extends State<TutorialDetails> {
     _parseRouteData();
   }
 
-  void _parseRouteData(){
+  void _parseRouteData() {
     _id = widget.id;
     _title = widget.title;
     _descriptionController.text = widget.description;
     _published = widget.published;
   }
 
-  void _updateTutorial(int id, BuildContext context) {
+  void _updateTutorial(int id, BuildContext context) async {
     setState(() {
       if (_descriptionController.text.isEmpty) {
         _descriptionInvalid = true;
@@ -108,8 +117,7 @@ class _TutorialDetailsState extends State<TutorialDetails> {
         _descriptionInvalid = false;
       }
     });
-    if(!_descriptionInvalid){
-
+    if (!_descriptionInvalid) {
       // PATCH no need to add all data, update specific data, not overwrite
       // BUT, server used Sequelize to access database
       // Sequelize update function support for both patch and update process
@@ -132,13 +140,13 @@ class _TutorialDetailsState extends State<TutorialDetails> {
         "description": _descriptionController.text,
         "published": _published
       };
-      debugPrint('Update data=> $data');
-      Future<Result> result = tutorialDataServices.update(id, data);
-      result.then((value) {
-        ScaffoldMessenger.of(context).clearSnackBars();
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(value.message)));
-      });
+      // debugPrint('Update data=> $data');
+      final appState = Provider.of<AppStateNotifier>(context, listen: false);
+      await appState.updateTutorial(id, data);
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(appState.message)));
+      Navigator.of(context).pop();
     }
   }
 }
